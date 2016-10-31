@@ -6,9 +6,30 @@ $(document).ready(function(){
 //     }
 // });
 
-  showAllStorage()
+  showAllStorage() //debugging function only
   showStoredList()
   saveFormInput()
+
+  $("#listarea").on({
+    mouseenter: function () {
+      $(this).children().last().css("display", "inline-block")
+    },
+    mouseleave: function () {
+      $(this).children().last().css("display", "none" )
+    }
+  }, "div.link-container");
+  // $("#listarea").on('mouseenter', 'div.link-container', function() {
+  //   $(this).css("background-color", "red")
+  // });
+  
+  // $("#listarea").on('mouseleave', 'div.link-container', function() {
+    // $(this).css("background-color", "blue")
+  // });
+
+  // $('body').on('mouseover', 'div.link-container', function(){
+  //     $(this).css("background-color", "red")
+  //     // $(this).css("display: inline")
+  //   })
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -41,15 +62,25 @@ $(document).ready(function(){
     chrome.storage.sync.get('savedLinks', callback)
     
     function callback(result){
-      var list = '';
+      let list = '';
       var myLinks = result.savedLinks;
       console.log("myLinks = " + JSON.stringify(myLinks))
-      // return myLinks
+      
       for (link in myLinks){
-        list += "<li>" + link + "   <i class='fa fa-clipboard fa-lg' aria-hidden='true'></i></li><li>" + "<a href='https://" + myLinks[link] + "'>"+ myLinks[link] + "</a>" + "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i></li><br>";
-        console.log (link);
-      }
-      $('ul#my-list').html(list)
+        $('ul#my-list').append("<div class='link-container'><li>" + link + 
+          "   <i class='fa fa-clipboard fa-lg' aria-hidden='true'></i></li><li class='list-url'>" + 
+          "<a href='https://"+ 
+          myLinks[link] + 
+          "'>"+ 
+          myLinks[link] + "</a>" + 
+          "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i></li></div>")
+      };
+      // return myLinks
+      // for (link in myLinks){
+      //   list += "<li>" + link + "   <i class='fa fa-clipboard fa-lg' aria-hidden='true'></i></li><li>" + "<a href='https://" + myLinks[link] + "'>"+ myLinks[link] + "</a>" + "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i></li><br>";
+      //   console.log (link);
+      // }
+      // $('ul#my-list').html(list)
       
     }
     
@@ -102,3 +133,4 @@ $(document).ready(function(){
     });
       
   };
+

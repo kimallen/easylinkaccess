@@ -10,3 +10,23 @@ ul {
 i {
 	color: gray;
 }
+
+i.fa-clipboard {
+	float: right;
+}
+
+li.list-url {
+	display: none;
+	/*display: inline-block;*/
+}
+
+div.link-container {
+	/*background-color: red; */
+	padding: 10px;
+}
+
+#listarea {
+	width: 250px;
+}
+
+

@@ -12,7 +12,8 @@ i {
 }
 
 i.fa-clipboard {
-	float: right;
+	/*float: right;*/
+	display: none;
 }
 
 li.list-url {
@@ -26,7 +27,7 @@ div.link-container {
 }
 
 #listarea {
-	width: 250px;
+	width: 200px;
 }
 
 

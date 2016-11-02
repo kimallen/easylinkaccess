@@ -5,23 +5,14 @@ $(document).ready(function(){
 //         console.error(error);
 //     }
 // });
+  new Clipboard('.btn')
 
   showAllStorage() //debugging function only
   showStoredList()
   saveFormInput()
+  toggleOnHover()
 
-  $("#listarea").on({
-    mouseenter: function () {
-      $(this).children().last().css("display", "inline-block");
-      $(this).children().first().find('i').css("display", "inline-block")
-    },
-    mouseleave: function () {
-      $(this).children().last().css("display", "none" )
-      $(this).children().first().find('i').css("display", "none")
-    }
-  }, "div.link-container");
-
-  new Clipboard('.btn')
+  
 
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
@@ -42,6 +33,19 @@ $(document).ready(function(){
   //       });
 });
 
+function toggleOnHover(){
+  $("#listarea").on({
+      mouseenter: function () {
+        $(this).children().last().css("display", "inline-block");
+        $(this).children().first().find('i').css("display", "inline-block")
+      },
+      mouseleave: function () {
+        $(this).children().last().css("display", "none" )
+        $(this).children().first().find('i').css("display", "none")
+      }
+    }, "div.link-container");
+};
+
   function showAllStorage(){
     chrome.storage.sync.get(null, function(result){
       console.log("all storage= " + JSON.stringify(result))
@@ -56,7 +60,6 @@ $(document).ready(function(){
     chrome.storage.sync.get('savedLinks', callback)
     
     function callback(result){
-      let list = '';
       var myLinks = result.savedLinks;
       console.log("myLinks = " + JSON.stringify(myLinks))
       
@@ -84,11 +87,9 @@ $(document).ready(function(){
     
     chrome.storage.sync.get('savedLinks', callback)
     
-    function callback(result){
-      var list;
+      function callback(result){
+
       var myLinks = result.savedLinks;
-      console.log("myLinks2 = " + JSON.stringify(myLinks))
-      // return myLinks
       
       var listOfLinks = myLinks
       if (typeof myLinks === "undefined"){
@@ -98,7 +99,6 @@ $(document).ready(function(){
         var listOfLinks = myLinks;
       };
       
-
       var linkTitle = $('form#add-link input[name=link-name]').val();
       var linkUrl = $('form#add-link input[name=link-url]').val();
 
@@ -120,13 +120,23 @@ $(document).ready(function(){
           "'>"+ 
           linkUrl + "</a>" + 
           "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
-
-    }
-    
-      // $(this).css({'background-color': 'blue'})
-      
-
-    });
-      
+      }
+    });   
   };
+  
+  function removeRecord(){
+
+      $('#listarea').on('click', 'i.fa-trash', function(){
+        const divToRemove = $(this).parent().parent();
+        const itemToRemove = $(this).parent().siblings().text();
+        console.log(itemToRemove)
+        console.log("in trash can")
+        
+        chrome.storage.sync.remove('savedLinks[itemToRemove]', function(){
+
+        })
+      });
+
+
+    };
 

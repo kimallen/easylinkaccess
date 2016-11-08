@@ -11,7 +11,7 @@ $(document).ready(function(){
   showStoredList()
   saveFormInput()
   toggleOnHover()
-
+  removeRecord()
   
 
   //opens a new tab when link is clicked
@@ -74,7 +74,7 @@ function toggleOnHover(){
           myLinks[link] + "</a>" + 
           "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
       };
-      
+      removeRecord()
     }
     
   };
@@ -132,8 +132,8 @@ function toggleOnHover(){
         console.log(itemToRemove)
         console.log("in trash can")
         
-        chrome.storage.sync.remove('savedLinks[itemToRemove]', function(){
-
+        chrome.storage.sync.remove('itemToRemove', function(){
+          $(divToRemove).remove()
         })
       });
 

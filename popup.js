@@ -67,12 +67,12 @@ function toggleOnHover(){
         $('ul#my-list').append("<div class='link-container'><li><span id='" + link + "'><a href='https://" + 
           myLinks[link] + 
           "'>" + link + "</a>" +
-          "  <i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + link + "' aria-hidden='true'></i></li><li class='list-url'>" + 
+          "<i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + link + "' aria-hidden='true'></i></li><li class='list-url'>" + 
           "<a href='https://"+ 
           myLinks[link] + 
           "'>"+ 
           myLinks[link] + "</a>" + 
-          "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
+          "  <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
       };
       removeRecord()
     }
@@ -114,7 +114,7 @@ function toggleOnHover(){
       $('ul#my-list').prepend("<div class='link-container'><li><span id='" + linkTitle + "'><a href='https://" + 
           linkUrl + 
           "'>" + linkTitle + "</a>" +
-          "  <i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + linkTitle + "' aria-hidden='true'></i></li><li class='list-url'>" + 
+          "<i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + linkTitle + "' aria-hidden='true'></i></li><li class='list-url'>" + 
           "<a href='https://"+ 
           linkUrl + 
           "'>"+ 
@@ -125,23 +125,28 @@ function toggleOnHover(){
   };
   
   function removeRecord(){
-
+      var itemToRemove;
+      var divToRemove;
       $('#listarea').on('click', 'i.fa-trash', function(){
-        const divToRemove = $(this).parent().parent();
-        const itemToRemove = $(this).parent().siblings().text();
-        
-        chrome.storage.sync.get('savedLinks', remove)
+        divToRemove = $(this).parent().parent();
+        itemToRemove = $(this).parent().siblings().text();
+        console.log("removeitem = " + itemToRemove)
+        debugger
+        chrome.storage.sync.get('savedLinks', removal)
         })
 
-        function remove(result){
-          console.log("before removal= " + JSON.stringify(result.savedLinks));
-          delete result.savedLinks["third"]
-          console.log("after removal= " + JSON.stringify(result.savedLinks));
+        function removal(result){
+          // console.log("before removal= " + JSON.stringify(result.savedLinks));
+          // console.log("removeitem inside remove = " + itemToRemove)
+          
+          // console.log("result.savedLinks[itemToRemove]= " + result.savedLinks.itemToRemove)
+          delete result.savedLinks[itemToRemove]
+          // console.log("after removal= " + JSON.stringify(result.savedLinks));
           $(divToRemove).remove()
           chrome.storage.sync.set({savedLinks:result.savedLinks}, function(){alert ("item deleted!")})
 
-      };
-
-
+        };
     };
+
+
 

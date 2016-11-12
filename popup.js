@@ -5,7 +5,7 @@ $(document).ready(function(){
 //         console.error(error);
 //     }
 // });
-  new Clipboard('.btn')
+  new Clipboard('.copy')
 
   showAllStorage(); //debugging function only
   showStoredList();
@@ -13,6 +13,7 @@ $(document).ready(function(){
   toggleOnHover();
   removeRecord();
   editRecord();
+  toggleNewLinkButton();
 
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
@@ -65,8 +66,8 @@ function toggleOnHover(){
       for (link in myLinks){
         $('ul#my-list').append("<div class='link-container'><li><span id='" + link + "'><a href='https://" + 
           myLinks[link] + 
-          "'>" + link + "</a>" +
-          "<i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + link + "' aria-hidden='true'></i></li><li class='list-url'>" + 
+          "'>" + link + "</a></span>" +
+          "<i class='copy fa fa-clipboard fa-lg' data-clipboard-target='#" + link + "' aria-hidden='true'></i></li><li class='list-url'>" + 
           "<a href='https://"+ 
           myLinks[link] + 
           "'>"+ 
@@ -114,8 +115,8 @@ function toggleOnHover(){
       });
       $('ul#my-list').prepend("<div class='link-container'><li><span id='" + linkTitle + "'><a href='https://" + 
           linkUrl + 
-          "'>" + linkTitle + "</a>" +
-          "<i class='btn fa fa-clipboard fa-lg' data-clipboard-target='#" + linkTitle + "' aria-hidden='true'></i></li><li class='list-url'>" + 
+          "'>" + linkTitle + "</a></span>" +
+          "<i class='copy fa fa-clipboard fa-lg' data-clipboard-target='#" + linkTitle + "' aria-hidden='true'></i></li><li class='list-url'>" + 
           "<a href='https://"+ 
           linkUrl + 
           "'>"+ 
@@ -168,10 +169,28 @@ function toggleOnHover(){
 
         chrome.storage.sync.set({savedLinks: savedLinks});
 
-      }
-    })
+      };
+    });
 
-  }
+  };
+
+  function toggleNewLinkButton (){
+
+    $('body').on('click', '#new-link-button', function(){
+      $('#add-link').toggle('fast')
+        // , function(){
+
+        // if (display == true){
+        //   $('#new-link-button').text('Hide Form');
+        // } else if (display == false){
+        //   $('#new-link-button').text('Add Link')
+        // };
+        
+      // });
+      // $('#add-link').css("display", "inline-block");
+      // $('#new-link-button').click(function(){})
+    });
+  };
 
 
 

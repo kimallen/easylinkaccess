@@ -8,23 +8,24 @@
 </head>
 
 <body>
+	<div id='container'>
 
-	<h1>Easy Link Access</h1>
-	<form action="popup.js" id="add-link">
-		<label for="link-name">Link Title</label>
-		<input type="text" name="link-name">
-		<label for="link-url">Link Url</label>
-		<input type="text" name="link-url">
-		<input type="submit" name="Save" value="Save">
-	</form>
+		<h1>Easy Link Access</h1>
+		<div id='new-link-div'><button id='new-link-button'>Add Link</button></div>
+		<form action="popup.js" id="add-link">
+			<label for="link-name">Link Title</label>
+			<input type="text" name="link-name">
+			<label for="link-url">Link Url</label>
+			<input type="text" name="link-url">
+			<input type="submit" name="Save" value="Save">
+		</form>
 
-	<h2>Your EasyLinks</h2>
+		<div id=listarea>
 
-	<div id=listarea>
+			<ul id="my-list">
 
-		<ul id="my-list">
-
-		</ul>
+			</ul>
+		</div>
 	</div>
 	<script src="popup.js"></script>
 </body>

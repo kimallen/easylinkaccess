@@ -1,3 +1,7 @@
+#container {
+	width: 200px;
+}
+
 h1 {
 	color: orange;
 }
@@ -33,6 +37,35 @@ div.link-container {
 
 #listarea {
 	width: 200px;
+}
+
+body {
+	border: solid lightgreen 10px;
+	padding: 10px;
+	border-radius: 2em;
+}
+
+
+input {
+	margin: 4px;
+}
+
+input[type="submit"] {
+	background-color: mediumseagreen;
+	border-radius: .5em;
+}
+
+#add-link {
+	display: none;
+}
+
+#new-link-div {
+	text-align: center;
+}
+
+#new-link-button {
+	background-color: lightgreen;
+	border-radius: .5em;
 }
 
 

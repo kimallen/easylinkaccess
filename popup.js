@@ -48,7 +48,6 @@ function toggleOnHover(){
 
   function showAllStorage(){
     chrome.storage.sync.get(null, function(result){
-      debugger
       console.log("all storage= " + JSON.stringify(result))
     })
 
@@ -130,23 +129,44 @@ function toggleOnHover(){
       $('#listarea').on('click', 'i.fa-trash', function(){
         divToRemove = $(this).parent().parent();
         itemToRemove = $(this).parent().siblings().text();
-        console.log("removeitem = " + itemToRemove)
-        debugger
-        chrome.storage.sync.get('savedLinks', removal)
-        })
+      
+        chrome.storage.sync.get('savedLinks', removal);
+        });
 
         function removal(result){
-          // console.log("before removal= " + JSON.stringify(result.savedLinks));
-          // console.log("removeitem inside remove = " + itemToRemove)
           
-          // console.log("result.savedLinks[itemToRemove]= " + result.savedLinks.itemToRemove)
-          delete result.savedLinks[itemToRemove]
-          // console.log("after removal= " + JSON.stringify(result.savedLinks));
-          $(divToRemove).remove()
-          chrome.storage.sync.set({savedLinks:result.savedLinks}, function(){alert ("item deleted!")})
+          delete result.savedLinks[itemToRemove];
+          $(divToRemove).remove();
+          chrome.storage.sync.set({savedLinks:result.savedLinks});
 
         };
     };
+
+  function editRecord(){
+
+    var itemToEdit;
+    $('#listarea').on('click', 'i.fa-pencil', function(){
+      itemToEdit = $(this).parent().siblings().text()
+
+      chrome.storage.sync.get('savedLinks', edit)
+
+      function edit (result){
+
+        $("input[name='link-name']").val(itemToEdit);
+        console.log(itemToEdit);
+        $("input[name='link-url']").val(result.savedLinks[itemToEdit]);
+        var linkTitle = $('form#add-link input[name=link-name]').val();
+        var linkUrl = $('form#add-link input[name=link-url]').val();
+
+        delete result.savedLinks[itemToEdit];
+        result.savedLinks[linkTitle]= linkUrl;
+
+        chrome.storage.sync.set{savedLinks: result.savedLinks};
+
+      }
+    })
+
+  }
 
 
 

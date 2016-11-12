@@ -7,12 +7,12 @@ $(document).ready(function(){
 // });
   new Clipboard('.btn')
 
-  showAllStorage() //debugging function only
-  showStoredList()
-  saveFormInput()
-  toggleOnHover()
-  removeRecord()
-  
+  showAllStorage(); //debugging function only
+  showStoredList();
+  saveFormInput();
+  toggleOnHover();
+  removeRecord();
+  editRecord();
 
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
@@ -108,7 +108,9 @@ function toggleOnHover(){
 
       listOfLinks[linkTitle] = linkUrl;
       chrome.storage.sync.set({savedLinks: listOfLinks}, function(){
-        console.log("Saved")
+        $('form#add-link input[name=link-name]').val('');
+        $('form#add-link input[name=link-url]').val('');
+        console.log("Saved");
       });
       $('ul#my-list').prepend("<div class='link-container'><li><span id='" + linkTitle + "'><a href='https://" + 
           linkUrl + 
@@ -119,7 +121,8 @@ function toggleOnHover(){
           "'>"+ 
           linkUrl + "</a>" + 
           "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
-      }
+
+      }; //ends callback
     });   
   };
   
@@ -143,25 +146,27 @@ function toggleOnHover(){
     };
 
   function editRecord(){
-
+    var divToReplace;
     var itemToEdit;
     $('#listarea').on('click', 'i.fa-pencil', function(){
       itemToEdit = $(this).parent().siblings().text()
+      divToReplace = $(this).parent().parent();
 
       chrome.storage.sync.get('savedLinks', edit)
 
       function edit (result){
+        let savedLinks = result.savedLinks;
 
         $("input[name='link-name']").val(itemToEdit);
-        console.log(itemToEdit);
-        $("input[name='link-url']").val(result.savedLinks[itemToEdit]);
+        $("input[name='link-url']").val(savedLinks[itemToEdit]);
+        
         var linkTitle = $('form#add-link input[name=link-name]').val();
         var linkUrl = $('form#add-link input[name=link-url]').val();
+        delete savedLinks[itemToEdit];
+        savedLinks[linkTitle]= linkUrl;
+        $(divToReplace).remove();
 
-        delete result.savedLinks[itemToEdit];
-        result.savedLinks[linkTitle]= linkUrl;
-
-        chrome.storage.sync.set{savedLinks: result.savedLinks};
+        chrome.storage.sync.set({savedLinks: savedLinks});
 
       }
     })

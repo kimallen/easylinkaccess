@@ -9,6 +9,7 @@ ul {
 
 i {
 	color: gray;
+	margin-left: 4px;
 }
 
 i.fa-clipboard {

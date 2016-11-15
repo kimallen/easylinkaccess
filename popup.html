@@ -1,14 +1,17 @@
 <html>
-	<head>
-		<script src='jquery-3.1.1.min.js'></script>
-		<link rel="stylesheet" href="font-awesome-4.6.3/css/font-awesome.min.css">
-		<link rel="stylesheet" href="style.css" type="text/css" />
+<head>
+	<script src='jquery-3.1.1.min.js'></script>
+	<script src="clipboard.js-master/dist/clipboard.min.js"></script>
+	<link rel="stylesheet" href="font-awesome-4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="style.css" type="text/css" />
 
-	</head>
+</head>
 
-	<body>
+<body>
+	<div id='container'>
 
 		<h1>Easy Link Access</h1>
+		<div id='new-link-div'><button id='new-link-button'>Add Link</button></div>
 		<form action="popup.js" id="add-link">
 			<label for="link-name">Link Title</label>
 			<input type="text" name="link-name">
@@ -17,15 +20,15 @@
 			<input type="submit" name="Save" value="Save">
 		</form>
 
-		<h2>Your EasyLinks</h2>
 		<div id=listarea>
-			
+
 			<ul id="my-list">
-				
+
 			</ul>
 		</div>
-		<script src="popup.js"></script>
-	</body>
+	</div>
+	<script src="popup.js"></script>
+</body>
 </html>
 <a
 

@@ -74,7 +74,7 @@ function toggleOnHover(){
           myLinks[link] + "</a>" + 
           "  <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
       };
-      removeRecord()
+      // removeRecord()
     }
     
   };
@@ -82,7 +82,7 @@ function toggleOnHover(){
 
   function saveFormInput (){
     
-    $("body").on("submit", '#add-link', function(e){
+    $("#container").on("submit", '#add-link', function(e){
       e.preventDefault();
     
     chrome.storage.sync.get('savedLinks', callback)
@@ -153,22 +153,37 @@ function toggleOnHover(){
       itemToEdit = $(this).parent().siblings().text()
       divToReplace = $(this).parent().parent();
 
+      if ($('#add-link').css('display') === 'none'){
+        $('#add-link').toggle('fast');
+      }
+
       chrome.storage.sync.get('savedLinks', edit)
 
       function edit (result){
+        
+        
         let savedLinks = result.savedLinks;
 
         $("input[name='link-name']").val(itemToEdit);
         $("input[name='link-url']").val(savedLinks[itemToEdit]);
         
-        var linkTitle = $('form#add-link input[name=link-name]').val();
-        var linkUrl = $('form#add-link input[name=link-url]').val();
-        delete savedLinks[itemToEdit];
-        savedLinks[linkTitle]= linkUrl;
-        $(divToReplace).remove();
+        $('#container').on('submit', '#add-link', function() {
 
-        chrome.storage.sync.set({savedLinks: savedLinks});
+          var linkTitle = $('form#add-link input[name=link-name]').val();
+          var linkUrl = $('form#add-link input[name=link-url]').val();
+          console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
+          console.log('before ' + JSON.stringify(savedLinks));
+          delete savedLinks[itemToEdit];
+          console.log('after ' + JSON.stringify(savedLinks));
+          savedLinks[linkTitle]= linkUrl;
+          console.log('after adding edit ' + JSON.stringify(savedLinks));
+          
+          $(divToReplace).remove();
 
+          chrome.storage.sync.set({savedLinks: savedLinks}, function(){
+            console.log('saved new savedLinks' + JSON.stringify(savedLinks))
+          });
+        });
       };
     });
 
@@ -177,18 +192,7 @@ function toggleOnHover(){
   function toggleNewLinkButton (){
 
     $('body').on('click', '#new-link-button', function(){
-      $('#add-link').toggle('fast')
-        // , function(){
-
-        // if (display == true){
-        //   $('#new-link-button').text('Hide Form');
-        // } else if (display == false){
-        //   $('#new-link-button').text('Add Link')
-        // };
-        
-      // });
-      // $('#add-link').css("display", "inline-block");
-      // $('#new-link-button').click(function(){})
+      $('#add-link').toggle('fast');
     });
   };
 

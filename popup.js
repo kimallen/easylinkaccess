@@ -14,7 +14,7 @@ $(document).ready(function(){
   removeRecord();
   editRecord();
   toggleNewLinkButton();
-
+  console.log (listItemHtml("kims website", "kimallen.github.io"))
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -37,12 +37,19 @@ $(document).ready(function(){
 function toggleOnHover(){
   $("#listarea").on({
       mouseenter: function () {
+        $(this).css("background-color", "yellow")
+        //targets clipboard in li with link name
+        $(this).children().first().find('i').css("display", "inline-block");
+        //targets li with link url
+        $(this).children().first().next().css("display", "inline-block");
+        //targets li with edit/delete icons
         $(this).children().last().css("display", "inline-block");
-        $(this).children().first().find('i').css("display", "inline-block")
       },
       mouseleave: function () {
-        $(this).children().last().css("display", "none" )
+        $(this).css("background-color", "white")
         $(this).children().first().find('i').css("display", "none")
+        $(this).children().first().next().css("display", "none");
+        $(this).children().last().css("display", "none" )
       }
     }, "div.link-container");
 };
@@ -54,6 +61,18 @@ function toggleOnHover(){
 
   }
 
+function listItemHtml (linkName, linkUrl){
+  return `<div class="link-container">
+  <li><a id="${linkName}" href="https://${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li>
+  <li class="list-url">
+  <a id="${linkUrl}" href="https://${linkUrl}">${linkUrl}</a>
+  <i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i>
+  </li><br>
+  <li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+  <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+  </li>
+  </div>`
+};
 
   function showStoredList(){
     
@@ -61,18 +80,11 @@ function toggleOnHover(){
     
     function callback(result){
       var myLinks = result.savedLinks;
-      console.log("myLinks = " + JSON.stringify(myLinks))
+      // console.log("myLinks = " + JSON.stringify(myLinks))
       
       for (link in myLinks){
-        $('ul#my-list').append("<div class='link-container'><li><span id='" + link + "'><a href='https://" + 
-          myLinks[link] + 
-          "'>" + link + "</a></span>" +
-          "<i class='copy fa fa-clipboard fa-lg' data-clipboard-target='#" + link + "' aria-hidden='true'></i></li><li class='list-url'>" + 
-          "<a href='https://"+ 
-          myLinks[link] + 
-          "'>"+ 
-          myLinks[link] + "</a>" + 
-          "  <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
+        let html = listItemHtml(link, myLinks[link])
+        $('ul#my-list').append(html)
       };
       // removeRecord()
     }
@@ -113,15 +125,9 @@ function toggleOnHover(){
         $('form#add-link input[name=link-url]').val('');
         console.log("Saved");
       });
-      $('ul#my-list').prepend("<div class='link-container'><li><span id='" + linkTitle + "'><a href='https://" + 
-          linkUrl + 
-          "'>" + linkTitle + "</a></span>" +
-          "<i class='copy fa fa-clipboard fa-lg' data-clipboard-target='#" + linkTitle + "' aria-hidden='true'></i></li><li class='list-url'>" + 
-          "<a href='https://"+ 
-          linkUrl + 
-          "'>"+ 
-          linkUrl + "</a>" + 
-          "   <i class='fa fa-pencil fa-lg' aria-hidden='true'></i> <i class='fa fa-trash fa-lg' aria-hidden='true'></i></li></div>")
+      
+      let html = listItemHtml(linkTitle, linkUrl);
+      $('ul#my-list').prepend(html);
 
       }; //ends callback
     });   
@@ -150,7 +156,8 @@ function toggleOnHover(){
     var divToReplace;
     var itemToEdit;
     $('#listarea').on('click', 'i.fa-pencil', function(){
-      itemToEdit = $(this).parent().siblings().text()
+      debugger
+      itemToEdit = $(this).parent().parent().children().first().text();
       divToReplace = $(this).parent().parent();
 
       if ($('#add-link').css('display') === 'none'){
@@ -164,8 +171,8 @@ function toggleOnHover(){
         
         let savedLinks = result.savedLinks;
 
-        $("input[name='link-name']").val(itemToEdit);
-        $("input[name='link-url']").val(savedLinks[itemToEdit]);
+        $('form#add-link input[name=link-name]').val(itemToEdit);
+        $('form#add-link input[name=link-url]').val(savedLinks[itemToEdit]);
         
         $('#container').on('submit', '#add-link', function() {
 

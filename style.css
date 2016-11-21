@@ -16,14 +16,17 @@ i {
 	margin-left: 4px;
 }
 
-i.fa-clipboard {
+i.name {
 	/*float: right;*/
+	display: none;
+}
+
+li.edit-icons{
 	display: none;
 }
 
 li.list-url {
 	display: none;
-	/*display: inline-block;*/
 }
 
 li {

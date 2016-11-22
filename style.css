@@ -24,6 +24,10 @@ i.name {
 li.edit-icons{
 	display: none;
 }
+/*to use for clipboard.js target element*/
+.noStyle {
+all: unset;
+}
 
 li.list-url {
 	display: none;
@@ -43,7 +47,7 @@ div.link-container {
 }
 
 body {
-	border: solid lightgreen 10px;
+	border: solid green 10px;
 	padding: 10px;
 	border-radius: 2em;
 }

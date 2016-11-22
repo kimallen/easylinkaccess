@@ -66,9 +66,7 @@ function listItemHtml (linkName, linkUrl){
   <li><a id="${linkName}" href="https://${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li>
   <li class="list-url">
   <a id="${linkUrl}" href="https://${linkUrl}">${linkUrl}</a>
-  <i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i>
-  </li><br>
-  <li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+  <i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
   <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
   </li>
   </div>`
@@ -138,16 +136,20 @@ function listItemHtml (linkName, linkUrl){
       var divToRemove;
       $('#listarea').on('click', 'i.fa-trash', function(){
         divToRemove = $(this).parent().parent();
-        itemToRemove = $(this).parent().siblings().text();
-      
+        itemToRemove = $(this).parent().parent().children().first().text();
+        // debugger
+        console.log("divToRemove = " + divToRemove)
+        console.log ("itemToRemove = " + itemToRemove)
         chrome.storage.sync.get('savedLinks', removal);
         });
 
         function removal(result){
-          
-          delete result.savedLinks[itemToRemove];
+          let savedLinks = result.savedLinks
+          console.log("before removal= " +savedLinks);
+          delete savedLinks[itemToRemove];
+          console.log("after remove = " + savedLinks);
           $(divToRemove).remove();
-          chrome.storage.sync.set({savedLinks:result.savedLinks});
+          chrome.storage.sync.set({savedLinks:savedLinks});
 
         };
     };
@@ -156,7 +158,6 @@ function listItemHtml (linkName, linkUrl){
     var divToReplace;
     var itemToEdit;
     $('#listarea').on('click', 'i.fa-pencil', function(){
-      debugger
       itemToEdit = $(this).parent().parent().children().first().text();
       divToReplace = $(this).parent().parent();
 
@@ -167,7 +168,6 @@ function listItemHtml (linkName, linkUrl){
       chrome.storage.sync.get('savedLinks', edit)
 
       function edit (result){
-        
         
         let savedLinks = result.savedLinks;
 
@@ -188,7 +188,8 @@ function listItemHtml (linkName, linkUrl){
           $(divToReplace).remove();
 
           chrome.storage.sync.set({savedLinks: savedLinks}, function(){
-            console.log('saved new savedLinks' + JSON.stringify(savedLinks))
+            console.log('saved new savedLinks' + JSON.stringify(savedLinks));
+            console.log('link removed = ' + JSON.stringify(savedLinks[itemToEdit]))
           });
         });
       };

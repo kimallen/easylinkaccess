@@ -99,18 +99,18 @@ function listItemHtml (linkName, linkUrl){
     
       function callback(result){
 
-      var myLinks = result.savedLinks;
+      // var myLinks = result.savedLinks;
       
-      var listOfLinks = myLinks
-      if (typeof myLinks === "undefined"){
+      // var listOfLinks = result.savedLinks;
+      if (typeof result.savedLinks === "undefined"){
         var listOfLinks = {};
       }
       else {
-        var listOfLinks = myLinks;
+        var listOfLinks = result.savedLinks;
       };
       
-      var linkTitle = $('form#add-link input[name=link-name]').val();
-      var linkUrl = $('form#add-link input[name=link-url]').val();
+      let linkTitle = $('form#add-link input[name=link-name]').val();
+      let linkUrl = $('form#add-link input[name=link-url]').val();
 
       if (!linkTitle || !linkUrl) {
             alert('Please fill in all fields');
@@ -122,6 +122,7 @@ function listItemHtml (linkName, linkUrl){
         $('form#add-link input[name=link-name]').val('');
         $('form#add-link input[name=link-url]').val('');
         console.log("Saved");
+        $('form#add-link').css("display", "none")
       });
       
       let html = listItemHtml(linkTitle, linkUrl);
@@ -178,11 +179,16 @@ function listItemHtml (linkName, linkUrl){
 
           var linkTitle = $('form#add-link input[name=link-name]').val();
           var linkUrl = $('form#add-link input[name=link-url]').val();
+          
+          if (!linkTitle || !linkUrl) {
+            alert('Please fill in all fields');
+            
+          }
           console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
           console.log('before ' + JSON.stringify(savedLinks));
           delete savedLinks[itemToEdit];
-          console.log('after ' + JSON.stringify(savedLinks));
           savedLinks[linkTitle]= linkUrl;
+          console.log('after ' + JSON.stringify(savedLinks));
           console.log('after adding edit ' + JSON.stringify(savedLinks));
           
           $(divToReplace).remove();

@@ -14,7 +14,8 @@ $(document).ready(function(){
   removeRecord();
   editRecord();
   toggleNewLinkButton();
-  console.log (listItemHtml("kims website", "kimallen.github.io"))
+  // toggleFormError();
+  formValidation();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -89,12 +90,40 @@ function listItemHtml (linkName, linkUrl){
     
   };
 
+  function formValidation(){
+    $("#add-link").validate({
+        rules: {
+          link-name: "required",
+          link-url: {
+            required: true,
+            url: true
+          }
+        },
+        messages: {
+          link-name: "Please name your link",
+          link-url: {
+            required: "Url required",
+            url: "Must be a valid url"
+          }
+        }
+    });
+  };
 
   function saveFormInput (){
     
     $("#container").on("submit", '#add-link', function(e){
       e.preventDefault();
     
+    let linkTitle = $('form#add-link input[name=link-name]').val();
+    let linkUrl = $('form#add-link input[name=link-url]').val();
+
+    if (!linkTitle || !linkUrl) {
+          // alert('Please fill in all fields');
+          $(".error").html("please fill in all fields");
+
+          return;
+        };
+
     chrome.storage.sync.get('savedLinks', callback)
     
       function callback(result){
@@ -109,13 +138,7 @@ function listItemHtml (linkName, linkUrl){
         var listOfLinks = result.savedLinks;
       };
       
-      let linkTitle = $('form#add-link input[name=link-name]').val();
-      let linkUrl = $('form#add-link input[name=link-url]').val();
-
-      if (!linkTitle || !linkUrl) {
-            alert('Please fill in all fields');
-            return;
-          }
+      
 
       listOfLinks[linkTitle] = linkUrl;
       chrome.storage.sync.set({savedLinks: listOfLinks}, function(){
@@ -138,17 +161,13 @@ function listItemHtml (linkName, linkUrl){
       $('#listarea').on('click', 'i.fa-trash', function(){
         divToRemove = $(this).parent().parent();
         itemToRemove = $(this).parent().parent().children().first().text();
-        // debugger
-        console.log("divToRemove = " + divToRemove)
-        console.log ("itemToRemove = " + itemToRemove)
+
         chrome.storage.sync.get('savedLinks', removal);
-        });
+      });
 
         function removal(result){
           let savedLinks = result.savedLinks
-          console.log("before removal= " +savedLinks);
           delete savedLinks[itemToRemove];
-          console.log("after remove = " + savedLinks);
           $(divToRemove).remove();
           chrome.storage.sync.set({savedLinks:savedLinks});
 
@@ -181,11 +200,12 @@ function listItemHtml (linkName, linkUrl){
           var linkUrl = $('form#add-link input[name=link-url]').val();
           
           if (!linkTitle || !linkUrl) {
-            alert('Please fill in all fields');
-            
+            // alert('Please fill in all fields');
+            $(".error").html("please fill in all fields");
+
           }
           console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
-          console.log('before ' + JSON.stringify(savedLinks));
+          console.log(`before ${JSON.stringify(savedLinks)}`);
           delete savedLinks[itemToEdit];
           savedLinks[linkTitle]= linkUrl;
           console.log('after ' + JSON.stringify(savedLinks));
@@ -202,6 +222,14 @@ function listItemHtml (linkName, linkUrl){
     });
 
   };
+
+  // function toggleFormError (){
+  //   if (!$("#add-link").length){
+  //     console.log("no error if form closed");
+  //     $(".error").html('');
+  //   }
+  //   else if ($("#add-link").length){ console.log("error visible")}
+  // };
 
   function toggleNewLinkButton (){
 

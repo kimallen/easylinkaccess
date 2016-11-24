@@ -16,13 +16,20 @@
 		<div class="error"></div>
 		<form action="popup.js" id="add-link">
 			<label for="link-name">Link Title</label>
-			<input type="text" name="link-name" required/>
+			<input type="text" name="link-name"/>
 			<label for="link-url">Link Url</label>
-			<input type="text" name="link-url" required/>
-			<input id=save-submit type="submit" name="Save" value="Save">
-			<input id=edit-submit type="submit" name="Edit" value="Edit">
+			<input type="text" name="link-url"/>
+			<input type="submit" name="Save" value="Save">
 		</form>
 
+		<form action="popup.js" id="edit-link">
+			<label for="link-name">Link Title</label>
+			<input type="text" name="link-name"/>
+			<label for="link-url">Link Url</label>
+			<input type="text" name="link-url"/>
+			<input type="submit" name="Edit" value="Edit">
+		</form>
+		
 		<div id=listarea>
 
 			<ul id="my-list">

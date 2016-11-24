@@ -9,10 +9,10 @@ $(document).ready(function(){
 
   showAllStorage(); //debugging function only
   showStoredList();
-  // saveFormInput();
+  saveFormInput();
+  editRecord();
   toggleOnHover();
   removeRecord();
-  editRecord();
   toggleNewLinkButton();
   // toggleFormError();
   // formValidation();
@@ -106,18 +106,6 @@ function listItemHtml (linkName, linkUrl){
     });
   };
 
-  function modifyData(){
-    //on submit, if it's edit class, remove the old record.
-    //saveFormInput
-    //remove edit class
-    $("#container").on("submit", "#add-link",function(){
-      if ($(this).hasClass("editable")){
-
-      };
-      saveFormInput();
-      $('#add-link').removeClass('editable');
-    })
-  }
 
   function saveFormInput (){
     
@@ -178,48 +166,67 @@ function listItemHtml (linkName, linkUrl){
         };
     };
 
-  function showEditForm(){
-    var divToReplace;
-    var itemToEdit;
+  // function showEditForm(){
+    
+  //   $('#listarea').on('click', 'i.fa-pencil', function(){
+  //     // $("#edit-submit").css("display", "block");
+  //     // $("#save-submit").css("display", "none");
+  //     let divToReplace;
+  //     let itemToEdit;
+
+  //     itemToEdit = $(this).parent().parent().children().first().text();
+  //     linkToEdit = $(this).parent().parent().children().first().next().text();
+  //     divToReplace = $(this).parent().parent();
+
+  //     if ($('#add-link').css('display') === 'none'){
+  //       $('#edit-link').toggle('fast');
+  //     };
+  //     $('form#add-link input[name=link-name]').val(itemToEdit);
+  //     $('form#add-link input[name=link-url]').val(linkToEdit);
+  //   });
+  // };
+
+  function editRecord(){
     $('#listarea').on('click', 'i.fa-pencil', function(){
-      $("#edit-submit").css("display", "block");
-      $("#save-submit").css("display", "none");
+      
+      var divToReplace;
+      var itemToEdit;
+
       itemToEdit = $(this).parent().parent().children().first().text();
       linkToEdit = $(this).parent().parent().children().first().next().text();
       divToReplace = $(this).parent().parent();
-
-      if ($('#add-link').css('display') === 'none'){
-        $('#add-link').toggle('fast');
+      if ($('#add-link').css('display') === 'block'){
+        $('#add-link').toggle();
+      }
+      if ($('#edit-link').css('display') === 'none'){
+        $('#edit-link').toggle('fast');
       };
-      $('form#add-link input[name=link-name]').val(itemToEdit);
-      $('form#add-link input[name=link-url]').val(linkToEdit);
+      $('form#edit-link input[name=link-name]').val(itemToEdit);
+      $('form#edit-link input[name=link-url]').val(linkToEdit);
     });
-  };
-
-  function editRecord(){
-    showEditForm();
+    // showEditForm();
 
     chrome.storage.sync.get('savedLinks', edit)
-
     function edit (result){
-      
+      console.log ("inside edit") 
       let savedLinks = result.savedLinks;
       
-      $('#container').on('click', '#edit-submit', function() {
-        
-        var linkTitle = $('form#add-link input[name=link-name]').val();
-        var linkUrl = $('form#add-link input[name=link-url]').val();
+      $('#container').on('submit', '#edit-link', function(e) {
+        e.preventDefault();
+        console.log("prevented default")
+        var linkTitle = $('form#edit-link input[name=link-name]').val();
+        var linkUrl = $('form#edit-link input[name=link-url]').val();
         
         if (!linkTitle || !linkUrl) {
           // alert('Please fill in all fields');
           $(".error").html("please fill in all fields");
 
-        }
-        // console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
-        // console.log(`before ${JSON.stringify(savedLinks)}`);
+        };
+        console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
+        console.log(`before ${JSON.stringify(savedLinks)}`);
         delete savedLinks[itemToEdit];
         savedLinks[linkTitle]= linkUrl;
-        // console.log('after adding edit ' + JSON.stringify(savedLinks));
+        // // console.log('after adding edit ' + JSON.stringify(savedLinks));
         
         $(divToReplace).remove();
 
@@ -252,7 +259,15 @@ function listItemHtml (linkName, linkUrl){
   function toggleNewLinkButton (){
 
     $('body').on('click', '#new-link-button', function(){
-      $('#add-link').toggle('fast');
+      if($('#edit-link').css("display")==="block"){
+      $('#edit-link').toggle();
+      };
+      // if($('#add-link').css("display")==="none"){
+      // $('#add-link').toggle('fast');
+      // };
+      if($('#edit-link').css("display")!="block"){
+      $('#add-link').toggle();
+      };
     });
   };
 

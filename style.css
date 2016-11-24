@@ -82,6 +82,10 @@ input[type="submit"] {
 	display: none;
 }
 
+#edit-link {
+	display: none;
+}
+
 #new-link-div {
 	text-align: center;
 }
@@ -91,7 +95,7 @@ input[type="submit"] {
 	border-radius: .5em;
 }
 
-#edit-submit{
-	display: none;
+.error {
+	color: red;
 }
 

@@ -1,5 +1,9 @@
 #container {
 	width: 200px;
+	background-color: white;
+	padding: 10px;
+	margin: 10px;
+	border-radius: 1em;
 }
 
 h1 {
@@ -29,6 +33,15 @@ li.edit-icons{
 all: unset;
 }
 
+a.no-underline{
+	text-decoration: none;
+	font-size: medium;
+}
+
+a {
+	color: inherit;
+}
+
 li.list-url {
 	display: none;
 }
@@ -46,11 +59,14 @@ div.link-container {
 	width: 200px;
 }
 
-body {
+html {
+	background-color: green;
+}
+/*body {
 	border: solid green 10px;
 	padding: 10px;
 	border-radius: 2em;
-}
+}*/
 
 
 input {
@@ -75,4 +91,7 @@ input[type="submit"] {
 	border-radius: .5em;
 }
 
+#edit-submit{
+	display: none;
+}
 

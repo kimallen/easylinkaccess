@@ -1,7 +1,8 @@
 <html>
 <head>
 	<script src='vendor/jquery-3.1.1.min.js'></script>
-	<script src=>"vendor/jquery.validate.min.js"</script>
+	<!-- <script src=>"vendor/jquery.validate.min.js"</script> -->
+	<script src='vendor/jquery-validation-1.15.0/dist/jquery.validate.min.js'></script>
 	<script src="vendor/clipboard.js-master/dist/clipboard.min.js"></script>
 	<link rel="stylesheet" href="vendor/font-awesome-4.6.3/css/font-awesome.min.css">
 	<link rel="stylesheet" href="style.css" type="text/css" />
@@ -18,7 +19,7 @@
 			<label for="link-name">Link Title</label>
 			<input type="text" name="link-name"/>
 			<label for="link-url">Link Url</label>
-			<input type="text" name="link-url"/>
+			<input type="url" name="link-url" value="http://"/>
 			<input type="submit" name="Save" value="Save">
 		</form>
 

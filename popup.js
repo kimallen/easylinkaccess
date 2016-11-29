@@ -15,7 +15,7 @@ $(document).ready(function(){
   removeRecord();
   toggleNewLinkButton();
   // toggleFormError();
-  // formValidation();
+  formValidation();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -64,7 +64,7 @@ function toggleOnHover(){
 
 function listItemHtml (linkName, linkUrl){
   return `<div class="link-container">
-  <li class="link-name"><a id="${linkName}" class="no-underline" href="https://${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li><li class="list-url"><a id="${linkUrl}" href="https://${linkUrl}">${linkUrl}</a><i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+  <li class="link-name"><a id="${linkName}" class="no-underline" href="${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li><li class="list-url"><a id="${linkUrl}" href="${linkUrl}">${linkUrl}</a><i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
   <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
   </li>
   </div>`
@@ -100,7 +100,23 @@ function listItemHtml (linkName, linkUrl){
           "link-name": "Please name your link",
           "link-url": {
             required: "Url required",
-            url: "Must be a valid url"
+            url: "Must be a valid url (use https:// or http://)"
+          }
+        }
+    });
+    $("#edit-link").validate({
+        rules: {
+          "link-name": "required",
+          "link-url": {
+            required: true,
+            url: true
+          }
+        },
+        messages: {
+          "link-name": "Please name your link",
+          "link-url": {
+            required: "Url required",
+            url: "Must be a valid url (use https:// or http://)"
           }
         }
     });
@@ -166,31 +182,11 @@ function listItemHtml (linkName, linkUrl){
         };
     };
 
-  // function showEditForm(){
-    
-  //   $('#listarea').on('click', 'i.fa-pencil', function(){
-  //     // $("#edit-submit").css("display", "block");
-  //     // $("#save-submit").css("display", "none");
-  //     let divToReplace;
-  //     let itemToEdit;
-
-  //     itemToEdit = $(this).parent().parent().children().first().text();
-  //     linkToEdit = $(this).parent().parent().children().first().next().text();
-  //     divToReplace = $(this).parent().parent();
-
-  //     if ($('#add-link').css('display') === 'none'){
-  //       $('#edit-link').toggle('fast');
-  //     };
-  //     $('form#add-link input[name=link-name]').val(itemToEdit);
-  //     $('form#add-link input[name=link-url]').val(linkToEdit);
-  //   });
-  // };
-
   function editRecord(){
-    $('#listarea').on('click', 'i.fa-pencil', function(){
-      
-      var divToReplace;
-      var itemToEdit;
+    let divToReplace;
+    let itemToEdit;
+  
+    $('#listarea').on('click', 'i.fa-pencil', function(){ 
 
       itemToEdit = $(this).parent().parent().children().first().text();
       linkToEdit = $(this).parent().parent().children().first().next().text();
@@ -207,54 +203,30 @@ function listItemHtml (linkName, linkUrl){
     // showEditForm();
 
     chrome.storage.sync.get('savedLinks', edit)
+    
     function edit (result){
       console.log ("inside edit") 
       let savedLinks = result.savedLinks;
       
       $('#container').on('submit', '#edit-link', function(e) {
         e.preventDefault();
-        console.log("prevented default")
         var linkTitle = $('form#edit-link input[name=link-name]').val();
         var linkUrl = $('form#edit-link input[name=link-url]').val();
         
-        if (!linkTitle || !linkUrl) {
-          // alert('Please fill in all fields');
-          $(".error").html("please fill in all fields");
-
-        };
-        console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
-        console.log(`before ${JSON.stringify(savedLinks)}`);
         delete savedLinks[itemToEdit];
         savedLinks[linkTitle]= linkUrl;
-        // // console.log('after adding edit ' + JSON.stringify(savedLinks));
         
-        $(divToReplace).remove();
-
         chrome.storage.sync.set({savedLinks: savedLinks}, function(){
-          console.log(`error = ${chrome.runtime.lastError}`)
-          $("#edit-submit").css("display", "none");
-          $("#save-submit").css("display", "block");
-          $('form#add-link').css("display", "none");
-          // console.log('saved new savedLinks' + JSON.stringify(savedLinks));
-          // showAllStorage();
-          // console.log("item to edit: " + itemToEdit)
-          // console.log('link removed = ' + JSON.stringify(savedLinks[itemToEdit]))
-
+          // console.log(`error = ${chrome.runtime.lastError}`)
+          $('form#edit-link').css("display", "none");
+          let html = listItemHtml(linkTitle, linkUrl)
+          $(html).insertAfter(divToReplace);
+          $(divToReplace).remove();
         });
 
       });
     };
   };
-
-  
-
-  // function toggleFormError (){
-  //   if (!$("#add-link").length){
-  //     console.log("no error if form closed");
-  //     $(".error").html('');
-  //   }
-  //   else if ($("#add-link").length){ console.log("error visible")}
-  // };
 
   function toggleNewLinkButton (){
 

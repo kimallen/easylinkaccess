@@ -16,6 +16,7 @@ $(document).ready(function(){
   toggleNewLinkButton();
   // toggleFormError();
   formValidation();
+  removeStyling();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -63,8 +64,10 @@ function toggleOnHover(){
   }
 
 function listItemHtml (linkName, linkUrl){
+  const flatLinkName = linkName.replace(/\s+/g, '')
+
   return `<div class="link-container">
-  <li class="link-name"><a id="${linkName}" class="no-underline" href="${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li><li class="list-url"><a id="${linkUrl}" href="${linkUrl}">${linkUrl}</a><i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+  <li class="link-name"><a id="${flatLinkName}" class="no-underline" href="${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${flatLinkName}" aria-hidden="true"></i></li><li class="list-url"><a id="${flatLinkName}-link" href="${linkUrl}">${linkUrl}</a><i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${flatLinkName}-link" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
   <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
   </li>
   </div>`
@@ -200,7 +203,6 @@ function listItemHtml (linkName, linkUrl){
       $('form#edit-link input[name=link-name]').val(itemToEdit);
       $('form#edit-link input[name=link-url]').val(linkToEdit);
     });
-    // showEditForm();
 
     chrome.storage.sync.get('savedLinks', edit)
     
@@ -243,5 +245,16 @@ function listItemHtml (linkName, linkUrl){
     });
   };
 
+function removeStyling(){
+
+  $('#listarea').on('click', '.fa-clipboard', function(){
+    debugger
+    $(this).prev().css('font-size', '20px');
+
+    $(this).prev().removeAttr('style');
+
+    console.log('inside clipboard click')
+  })
+}
 
 

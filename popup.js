@@ -6,6 +6,8 @@ $(document).ready(function(){
 //     }
 // });
   new Clipboard('.copy')
+  removeStyling();
+
 
   showAllStorage(); //debugging function only
   showStoredList();
@@ -16,7 +18,6 @@ $(document).ready(function(){
   toggleNewLinkButton();
   // toggleFormError();
   formValidation();
-  removeStyling();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
      chrome.tabs.create({url: $(this).attr('href')});
@@ -39,7 +40,7 @@ $(document).ready(function(){
 function toggleOnHover(){
   $("#listarea").on({
       mouseenter: function () {
-        $(this).css("background-color", "yellow")
+        $(this).css("background-color", "#ffffe6")
         //targets clipboard in li with link name
         $(this).children().first().find('i').css("display", "inline-block");
         //targets li with link url
@@ -246,15 +247,29 @@ function listItemHtml (linkName, linkUrl){
   };
 
 function removeStyling(){
+  
+  // let trigger = $('#listarea').on('click', '.fa-clipboard', function(e){
+  //   e.preventDefault();
+  //   // $(this).prev().css('font-size', '20px');
+  //   // $(this).prev().addClass('noStyle');
+  //   $(this).prev().removeAttr('style');
+  // });
 
-  $('#listarea').on('click', '.fa-clipboard', function(){
+  // new Clipboard('.copy', {
+  //   target: function(trigger) {
+  //       return trigger.nextElementSibling();
+  //   }
+  // });
+  $('#listarea').on('click', '.fa-clipboard', function(e){
+    e.preventDefault();
+    console.log("inside preventDefault")
     debugger
+
     $(this).prev().css('font-size', '20px');
+    $(this).prev().addClass('noStyle');
+    // $(this).prev().removeAttr('style');
 
-    $(this).prev().removeAttr('style');
-
-    console.log('inside clipboard click')
   })
-}
+};
 
 

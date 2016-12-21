@@ -5,9 +5,24 @@ $(document).ready(function(){
 //         console.error(error);
 //     }
 // });
-  new Clipboard('.copy')
-  removeStyling();
-
+  // new Clipboard('.copy')
+  // removeStyling();
+  new Clipboard('.copy', {
+    
+    target: function(trigger){
+      console.log(trigger.previousSibling);
+        var thing = trigger.previousSibling.removeAttribute('style');
+        console.log('thing', trigger.previousSibling);
+        return trigger.previousSibling;
+        // return $.parseHTML('<div><a href="http://google.com">Tester</a></div>');
+    },
+    // text: function(trigger) {
+    //     console.log(trigger.previousSibling);
+    //     console.log(trigger.parent);
+    //     // return $.parseHTML('<div><a href="http://google.com">Tester</a></div>');
+    //   return 'hello'
+    // }
+});
 
   showAllStorage(); //debugging function only
   showStoredList();
@@ -266,8 +281,8 @@ function removeStyling(){
     debugger
 
     $(this).prev().css('font-size', '20px');
-    $(this).prev().addClass('noStyle');
-    // $(this).prev().removeAttr('style');
+    // $(this).prev().addClass('noStyle');
+    $(this).prev().removeAttr('style');
 
   })
 };

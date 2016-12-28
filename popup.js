@@ -5,7 +5,7 @@ $(document).ready(function(){
 //         console.error(error);
 //     }
 // });
-  // new Clipboard('.copy')
+  new Clipboard('.copy')
   // removeStyling();
   new Clipboard('.copy', {
     
@@ -55,17 +55,18 @@ $(document).ready(function(){
 function toggleOnHover(){
   $("#listarea").on({
       mouseenter: function () {
-        $(this).css("background-color", "#ffffe6")
+        $(this).addClass("selected");
         //targets clipboard in li with link name
-        $(this).children().first().find('i').css("display", "inline-block");
+        // $(this).children().first().find('i').css("display", "inline-block");
         //targets li with link url
         $(this).children().first().next().css("display", "block");
         //targets li with edit/delete icons
         $(this).children().last().css("display", "block");
       },
       mouseleave: function () {
-        $(this).css("background-color", "white")
-        $(this).children().first().find('i').css("display", "none")
+        $(this).removeClass("selected");
+        // $(this).css("background-color", "#ffffe6")
+        $(this).children().first().find('i').css("display", "none");
         $(this).children().first().next().css("display", "none");
         $(this).children().last().css("display", "none" )
       }

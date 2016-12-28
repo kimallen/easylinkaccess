@@ -1,6 +1,11 @@
+html {
+	background-color: green;
+	background-color: #990033;
+}
+
 #container {
 	width: 200px;
-	background-color: white;
+	background-color: #ffffe6;
 	padding: 10px;
 	margin: 20px 10px;
 	border-radius: 1em;
@@ -56,13 +61,16 @@ div.link-container {
 	border-radius: 1em;
 }
 
+.selected {
+	background-color: white;
+	border: 1px solid orange;
+}
+
 #listarea {
 	width: 200px;
 }
 
-html {
-	background-color: green;
-}
+
 /*body {
 	border: solid green 10px;
 	padding: 10px;

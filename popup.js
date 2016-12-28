@@ -7,22 +7,6 @@ $(document).ready(function(){
 // });
   new Clipboard('.copy')
   // removeStyling();
-  new Clipboard('.copy', {
-    
-    target: function(trigger){
-      console.log(trigger.previousSibling);
-        var thing = trigger.previousSibling.removeAttribute('style');
-        console.log('thing', trigger.previousSibling);
-        return trigger.previousSibling;
-        // return $.parseHTML('<div><a href="http://google.com">Tester</a></div>');
-    },
-    // text: function(trigger) {
-    //     console.log(trigger.previousSibling);
-    //     console.log(trigger.parent);
-    //     // return $.parseHTML('<div><a href="http://google.com">Tester</a></div>');
-    //   return 'hello'
-    // }
-});
 
   showAllStorage(); //debugging function only
   showStoredList();
@@ -31,7 +15,6 @@ $(document).ready(function(){
   toggleOnHover();
   removeRecord();
   toggleNewLinkButton();
-  // toggleFormError();
   formValidation();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
@@ -39,17 +22,7 @@ $(document).ready(function(){
      return false;
    });
 
-  // chrome.storage.onChanged.addListener(function(changes, namespace) {
-  //         for (key in changes) {
-  //           var storageChange = changes[key];
-  //           console.log('Storage key "%s" in namespace "%s" changed. ' +
-  //                       'Old value was "%s", new value is "%s".',
-  //                       key,
-  //                       namespace,
-  //                       storageChange.oldValue,
-  //                       storageChange.newValue);
-  //         }
-  //       });
+  
 });
 
 function toggleOnHover(){
@@ -65,7 +38,6 @@ function toggleOnHover(){
       },
       mouseleave: function () {
         $(this).removeClass("selected");
-        // $(this).css("background-color", "#ffffe6")
         $(this).children().first().find('i').css("display", "none");
         $(this).children().first().next().css("display", "none");
         $(this).children().last().css("display", "none" )
@@ -96,7 +68,6 @@ function listItemHtml (linkName, linkUrl){
     
     function callback(result){
       var myLinks = result.savedLinks;
-      // console.log("myLinks = " + JSON.stringify(myLinks))
       
       for (link in myLinks){
         let html = listItemHtml(link, myLinks[link])
@@ -224,7 +195,6 @@ function listItemHtml (linkName, linkUrl){
     chrome.storage.sync.get('savedLinks', edit)
     
     function edit (result){
-      console.log ("inside edit") 
       let savedLinks = result.savedLinks;
       
       $('#container').on('submit', '#edit-link', function(e) {
@@ -236,7 +206,6 @@ function listItemHtml (linkName, linkUrl){
         savedLinks[linkTitle]= linkUrl;
         
         chrome.storage.sync.set({savedLinks: savedLinks}, function(){
-          // console.log(`error = ${chrome.runtime.lastError}`)
           $('form#edit-link').css("display", "none");
           let html = listItemHtml(linkTitle, linkUrl)
           $(html).insertAfter(divToReplace);
@@ -278,8 +247,6 @@ function removeStyling(){
   // });
   $('#listarea').on('click', '.fa-clipboard', function(e){
     e.preventDefault();
-    console.log("inside preventDefault")
-    debugger
 
     $(this).prev().css('font-size', '20px');
     // $(this).prev().addClass('noStyle');

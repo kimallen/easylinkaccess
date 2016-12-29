@@ -1,9 +1,10 @@
 <html>
 <head>
-	<script src='jquery-3.1.1.min.js'></script>
-	<script src="clipboard.js-master/dist/clipboard.min.js"></script>
-	<script src=></script>
-	<link rel="stylesheet" href="font-awesome-4.6.3/css/font-awesome.min.css">
+	<script src='vendor/jquery-3.1.1.min.js'></script>
+	<!-- <script src=>"vendor/jquery.validate.min.js"</script> -->
+	<script src='vendor/jquery-validation-1.15.0/dist/jquery.validate.min.js'></script>
+	<script src="vendor/clipboard.min.js"></script>
+	<link rel="stylesheet" href="vendor/font-awesome-4.6.3/css/font-awesome.min.css">
 	<link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
@@ -15,13 +16,29 @@
 		<div id='new-link-div'><button id='new-link-button'>Add Link</button></div>
 		<div class="error"></div>
 		<form action="popup.js" id="add-link">
-			<label for="link-name">Link Title</label>
-			<input type="text" name="link-name" required/>
-			<label for="link-url">Link Url</label>
-			<input type="url" name="link-url" required/>
-			<input type="submit" name="Save" value="Save">
+			<div>
+				<label for="link-name">Link Title</label>
+				<input type="text" name="link-name"/>
+			</div>
+			<div>
+				<label for="link-url">Link Url</label>
+				<input type="url" name="link-url" value="https://"/>
+			</div>
+				<input type="submit" name="Save" value="Save">
 		</form>
 
+		<form action="popup.js" id="edit-link">
+			<div>
+				<label for="link-name">Link Title</label>
+				<input type="text" name="link-name"/>
+			</div>
+			<div>
+				<label for="link-url">Link Url</label>
+				<input type="text" name="link-url" value="http://"/>
+			</div>
+			<input type="submit" name="Edit" value="Edit">
+		</form>
+		
 		<div id=listarea>
 
 			<ul id="my-list">
@@ -32,6 +49,3 @@
 	<script src="popup.js"></script>
 </body>
 </html>
-<a
-
-

@@ -6,15 +6,15 @@ $(document).ready(function(){
 //     }
 // });
   new Clipboard('.copy')
+  // removeStyling();
 
   showAllStorage(); //debugging function only
   showStoredList();
   saveFormInput();
+  editRecord();
   toggleOnHover();
   removeRecord();
-  editRecord();
   toggleNewLinkButton();
-  // toggleFormError();
   formValidation();
   //opens a new tab when link is clicked
   $('body').on('click', 'a', function(){
@@ -22,33 +22,23 @@ $(document).ready(function(){
      return false;
    });
 
-  // chrome.storage.onChanged.addListener(function(changes, namespace) {
-  //         for (key in changes) {
-  //           var storageChange = changes[key];
-  //           console.log('Storage key "%s" in namespace "%s" changed. ' +
-  //                       'Old value was "%s", new value is "%s".',
-  //                       key,
-  //                       namespace,
-  //                       storageChange.oldValue,
-  //                       storageChange.newValue);
-  //         }
-  //       });
+  
 });
 
 function toggleOnHover(){
   $("#listarea").on({
       mouseenter: function () {
-        $(this).css("background-color", "yellow")
+        $(this).addClass("selected");
         //targets clipboard in li with link name
-        $(this).children().first().find('i').css("display", "inline-block");
+        // $(this).children().first().find('i').css("display", "inline-block");
         //targets li with link url
-        $(this).children().first().next().css("display", "inline-block");
+        $(this).children().first().next().css("display", "block");
         //targets li with edit/delete icons
-        $(this).children().last().css("display", "inline-block");
+        $(this).children().last().css("display", "block");
       },
       mouseleave: function () {
-        $(this).css("background-color", "white")
-        $(this).children().first().find('i').css("display", "none")
+        $(this).removeClass("selected");
+        $(this).children().first().find('i').css("display", "none");
         $(this).children().first().next().css("display", "none");
         $(this).children().last().css("display", "none" )
       }
@@ -63,11 +53,10 @@ function toggleOnHover(){
   }
 
 function listItemHtml (linkName, linkUrl){
+  const flatLinkName = linkName.replace(/\s+/g, '')
+
   return `<div class="link-container">
-  <li><a id="${linkName}" href="https://${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkName}" aria-hidden="true"></i></li>
-  <li class="list-url">
-  <a id="${linkUrl}" href="https://${linkUrl}">${linkUrl}</a>
-  <i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${linkUrl}" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+  <li class="link-name"><a id="${flatLinkName}" class="no-underline" href="${linkUrl}">${linkName}</a><i class="name copy fa fa-clipboard fa-lg" data-clipboard-target="#${flatLinkName}" aria-hidden="true"></i></li><li class="list-url"><a id="${flatLinkName}-link" href="${linkUrl}">${linkUrl}</a><i class="copy fa fa-clipboard fa-lg" data-clipboard-target="#${flatLinkName}-link" aria-hidden="true"></i></li><li class="edit-icons"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
   <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
   </li>
   </div>`
@@ -79,7 +68,6 @@ function listItemHtml (linkName, linkUrl){
     
     function callback(result){
       var myLinks = result.savedLinks;
-      // console.log("myLinks = " + JSON.stringify(myLinks))
       
       for (link in myLinks){
         let html = listItemHtml(link, myLinks[link])
@@ -93,21 +81,38 @@ function listItemHtml (linkName, linkUrl){
   function formValidation(){
     $("#add-link").validate({
         rules: {
-          link-name: "required",
-          link-url: {
+          "link-name": "required",
+          "link-url": {
             required: true,
             url: true
           }
         },
         messages: {
-          link-name: "Please name your link",
-          link-url: {
+          "link-name": "Please name your link",
+          "link-url": {
             required: "Url required",
-            url: "Must be a valid url"
+            url: "Must be a valid url (use https:// or http://)"
+          }
+        }
+    });
+    $("#edit-link").validate({
+        rules: {
+          "link-name": "required",
+          "link-url": {
+            required: true,
+            url: true
+          }
+        },
+        messages: {
+          "link-name": "Please name your link",
+          "link-url": {
+            required: "Url required",
+            url: "Must be a valid url (use https:// or http://)"
           }
         }
     });
   };
+
 
   function saveFormInput (){
     
@@ -120,7 +125,6 @@ function listItemHtml (linkName, linkUrl){
     if (!linkTitle || !linkUrl) {
           // alert('Please fill in all fields');
           $(".error").html("please fill in all fields");
-
           return;
         };
 
@@ -128,28 +132,23 @@ function listItemHtml (linkName, linkUrl){
     
       function callback(result){
 
-      // var myLinks = result.savedLinks;
+        if (typeof result.savedLinks === "undefined"){
+          var listOfLinks = {};
+        }
+        else {
+          var listOfLinks = result.savedLinks;
+        };
       
-      // var listOfLinks = result.savedLinks;
-      if (typeof result.savedLinks === "undefined"){
-        var listOfLinks = {};
-      }
-      else {
-        var listOfLinks = result.savedLinks;
-      };
-      
-      
-
-      listOfLinks[linkTitle] = linkUrl;
-      chrome.storage.sync.set({savedLinks: listOfLinks}, function(){
-        $('form#add-link input[name=link-name]').val('');
-        $('form#add-link input[name=link-url]').val('');
-        console.log("Saved");
-        $('form#add-link').css("display", "none")
-      });
-      
-      let html = listItemHtml(linkTitle, linkUrl);
-      $('ul#my-list').prepend(html);
+        listOfLinks[linkTitle] = linkUrl;
+        chrome.storage.sync.set({savedLinks: listOfLinks}, function(){
+          $('form#add-link input[name=link-name]').val('');
+          $('form#add-link input[name=link-url]').val('');
+          console.log("Saved");
+          $('form#add-link').css("display", "none");
+        });
+        
+        let html = listItemHtml(linkTitle, linkUrl);
+        $('ul#my-list').prepend(html);
 
       }; //ends callback
     });   
@@ -175,68 +174,86 @@ function listItemHtml (linkName, linkUrl){
     };
 
   function editRecord(){
-    var divToReplace;
-    var itemToEdit;
-    $('#listarea').on('click', 'i.fa-pencil', function(){
+    let divToReplace;
+    let itemToEdit;
+  
+    $('#listarea').on('click', 'i.fa-pencil', function(){ 
+
       itemToEdit = $(this).parent().parent().children().first().text();
+      linkToEdit = $(this).parent().parent().children().first().next().text();
       divToReplace = $(this).parent().parent();
-
-      if ($('#add-link').css('display') === 'none'){
-        $('#add-link').toggle('fast');
+      if ($('#add-link').css('display') === 'block'){
+        $('#add-link').toggle();
       }
-
-      chrome.storage.sync.get('savedLinks', edit)
-
-      function edit (result){
-        
-        let savedLinks = result.savedLinks;
-
-        $('form#add-link input[name=link-name]').val(itemToEdit);
-        $('form#add-link input[name=link-url]').val(savedLinks[itemToEdit]);
-        
-        $('#container').on('submit', '#add-link', function() {
-
-          var linkTitle = $('form#add-link input[name=link-name]').val();
-          var linkUrl = $('form#add-link input[name=link-url]').val();
-          
-          if (!linkTitle || !linkUrl) {
-            // alert('Please fill in all fields');
-            $(".error").html("please fill in all fields");
-
-          }
-          console.log("savedLinks[itemToEdit] = " + savedLinks[itemToEdit]);
-          console.log(`before ${JSON.stringify(savedLinks)}`);
-          delete savedLinks[itemToEdit];
-          savedLinks[linkTitle]= linkUrl;
-          console.log('after ' + JSON.stringify(savedLinks));
-          console.log('after adding edit ' + JSON.stringify(savedLinks));
-          
-          $(divToReplace).remove();
-
-          chrome.storage.sync.set({savedLinks: savedLinks}, function(){
-            console.log('saved new savedLinks' + JSON.stringify(savedLinks));
-            console.log('link removed = ' + JSON.stringify(savedLinks[itemToEdit]))
-          });
-        });
+      if ($('#edit-link').css('display') === 'none'){
+        $('#edit-link').toggle('fast');
       };
+      $('form#edit-link input[name=link-name]').val(itemToEdit);
+      $('form#edit-link input[name=link-url]').val(linkToEdit);
     });
 
-  };
+    chrome.storage.sync.get('savedLinks', edit)
+    
+    function edit (result){
+      let savedLinks = result.savedLinks;
+      
+      $('#container').on('submit', '#edit-link', function(e) {
+        e.preventDefault();
+        var linkTitle = $('form#edit-link input[name=link-name]').val();
+        var linkUrl = $('form#edit-link input[name=link-url]').val();
+        
+        delete savedLinks[itemToEdit];
+        savedLinks[linkTitle]= linkUrl;
+        
+        chrome.storage.sync.set({savedLinks: savedLinks}, function(){
+          $('form#edit-link').css("display", "none");
+          let html = listItemHtml(linkTitle, linkUrl)
+          $(html).insertAfter(divToReplace);
+          $(divToReplace).remove();
+        });
 
-  // function toggleFormError (){
-  //   if (!$("#add-link").length){
-  //     console.log("no error if form closed");
-  //     $(".error").html('');
-  //   }
-  //   else if ($("#add-link").length){ console.log("error visible")}
-  // };
+      });
+    };
+  };
 
   function toggleNewLinkButton (){
 
     $('body').on('click', '#new-link-button', function(){
-      $('#add-link').toggle('fast');
+      if($('#edit-link').css("display")==="block"){
+      $('#edit-link').toggle();
+
+      };
+      // if($('#add-link').css("display")==="none"){
+      // $('#add-link').toggle('fast');
+      // };
+      if($('#edit-link').css("display")!="block"){
+      $('#add-link').toggle();
+      };
     });
   };
 
+function removeStyling(){
+  
+  // let trigger = $('#listarea').on('click', '.fa-clipboard', function(e){
+  //   e.preventDefault();
+  //   // $(this).prev().css('font-size', '20px');
+  //   // $(this).prev().addClass('noStyle');
+  //   $(this).prev().removeAttr('style');
+  // });
+
+  // new Clipboard('.copy', {
+  //   target: function(trigger) {
+  //       return trigger.nextElementSibling();
+  //   }
+  // });
+  $('#listarea').on('click', '.fa-clipboard', function(e){
+    e.preventDefault();
+
+    $(this).prev().css('font-size', '20px');
+    // $(this).prev().addClass('noStyle');
+    $(this).prev().removeAttr('style');
+
+  })
+};
 
 

@@ -1,5 +1,16 @@
+html {
+	background-color: green;
+	background-color: #990033;
+	min-width: 325px;
+}
+
 #container {
-	width: 200px;
+	/*width: 200px;*/
+	background-color: #ffffe6;
+	padding: 10px;
+	margin: 20px 10px;
+	border-radius: 1em;
+	text-align: center;
 }
 
 h1 {
@@ -29,6 +40,15 @@ li.edit-icons{
 all: unset;
 }
 
+a.no-underline{
+	text-decoration: none;
+	font-size: medium;
+}
+
+a {
+	color: inherit;
+}
+
 li.list-url {
 	display: none;
 }
@@ -38,19 +58,25 @@ li {
 }
 
 div.link-container {
-	/*background-color: red; */
 	padding: 6px;
+	border-radius: 1em;
+}
+
+.selected {
+	background-color: white;
+	border: 1px solid orange;
 }
 
 #listarea {
-	width: 200px;
+	/*width: 200px;*/
 }
 
-body {
+
+/*body {
 	border: solid green 10px;
 	padding: 10px;
 	border-radius: 2em;
-}
+}*/
 
 
 input {
@@ -66,13 +92,22 @@ input[type="submit"] {
 	display: none;
 }
 
+#edit-link {
+	display: none;
+}
+
 #new-link-div {
 	text-align: center;
+	margin-bottom: 5px;
 }
 
 #new-link-button {
 	background-color: lightgreen;
 	border-radius: .5em;
+}
+
+.error {
+	color: red;
 }
 
 

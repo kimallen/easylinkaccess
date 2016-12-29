@@ -221,6 +221,7 @@ function listItemHtml (linkName, linkUrl){
     $('body').on('click', '#new-link-button', function(){
       if($('#edit-link').css("display")==="block"){
       $('#edit-link').toggle();
+
       };
       // if($('#add-link').css("display")==="none"){
       // $('#add-link').toggle('fast');

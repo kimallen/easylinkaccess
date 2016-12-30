@@ -5,7 +5,6 @@ html {
 }
 
 #container {
-	/*width: 200px;*/
 	background-color: #ffffe6;
 	padding: 10px;
 	margin: 20px 10px;
@@ -24,7 +23,7 @@ ul {
 
 i {
 	color: gray;
-	margin-left: 4px;
+	margin: 4px;
 }
 
 i.name {
@@ -64,20 +63,8 @@ div.link-container {
 
 .selected {
 	background-color: white;
-	border: 1px solid orange;
+	border: 3px solid orange;
 }
-
-#listarea {
-	/*width: 200px;*/
-}
-
-
-/*body {
-	border: solid green 10px;
-	padding: 10px;
-	border-radius: 2em;
-}*/
-
 
 input {
 	margin: 4px;
@@ -106,8 +93,5 @@ input[type="submit"] {
 	border-radius: .5em;
 }
 
-.error {
-	color: red;
-}
 
 

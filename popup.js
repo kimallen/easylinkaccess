@@ -110,12 +110,6 @@ function saveFormInput (){
   let linkTitle = $('form#add-link input[name=link-name]').val();
   let linkUrl = $('form#add-link input[name=link-url]').val();
 
-  // if (!linkTitle || !linkUrl) {
-  //       // alert('Please fill in all fields');
-  //       $(".error").html("please fill in all fields");
-  //       return;
-  //     };
-
   chrome.storage.sync.get('savedLinks', callback)
   
     function callback(result){

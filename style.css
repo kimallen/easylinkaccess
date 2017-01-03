@@ -4,6 +4,10 @@ html {
 	min-width: 325px;
 }
 
+body {
+	font-family: "Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Tahoma,sans-serif
+}
+
 #container {
 	background-color: #ffffe6;
 	padding: 10px;
@@ -13,7 +17,7 @@ html {
 }
 
 h1 {
-	color: orange;
+	color: #ff6633;
 }
 
 ul {
@@ -63,7 +67,7 @@ div.link-container {
 
 .selected {
 	background-color: white;
-	border: 3px solid orange;
+	border: 3px solid #ff9933;
 }
 
 input {
